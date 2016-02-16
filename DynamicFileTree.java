@@ -99,21 +99,15 @@ public class DynamicFileTree extends StaticFileTree implements TreeModelListener
 	@Override
 	public void update()
 	{
-		//find out what ever things are expanded
-		Enumeration<TreePath> pathsExpanded = getExpandedDescendants(new TreePath(this.root.getPath()));
-
+		String expandedStuff = TreeUtil.getExpansionState(this); //TODO: understand how to include all expanded rows
 		super.update();
 
 		//registered to old tree but not new one made in super.update()
 		this.treeModel.addTreeModelListener(this);
 
 		//expand paths that were previously expanded
-		while(pathsExpanded.hasMoreElements())
-		{
-			TreePath n = pathsExpanded.nextElement();
-			System.out.println(n);
-			expandPath(n);
-		}
+		TreeUtil.setExpansionState(this, expandedStuff);
+
 
 	}
 
@@ -125,12 +119,12 @@ public class DynamicFileTree extends StaticFileTree implements TreeModelListener
 
 		if(parent == null) throw new Exception("No Folder is selected");
 		if( parent.getUserObject() == null) throw new Exception("Parent has no userObject");
-
+		System.out.println("asdfasdf");
 		newFile = new FileElement((FileElement)parent.getUserObject(), "5"+name, (byte)typeId, (byte) 5);
 		update();
 	}
 
-	public boolean removeCurentSelectedFEFromTree()
+	public boolean removeCurrentSelectedFEFromTree()
 	{
 		DefaultMutableTreeNode nodeToDelete = (DefaultMutableTreeNode) getLastSelectedPathComponent();
 		FileElement feToDelete = (FileElement) nodeToDelete.getUserObject();

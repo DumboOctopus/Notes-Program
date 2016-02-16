@@ -44,7 +44,7 @@ public class FileReaderWriter
 	//====Reading and writing 
 	public String getContent()
 	{
-		String output = "";
+		StringBuilder builder = new StringBuilder();
 		if(file.isDirectory()) 
 		{
 			System.out.println("ERROR: tried to read to directory; 45 FileReaderWriter.java");
@@ -56,15 +56,16 @@ public class FileReaderWriter
 			scan.useDelimiter("\n");
 			while(scan.hasNext())
 			{
-				output += scan.next() + "\n";
+				builder.append( scan.next());
+				builder.append("\n");
 			}
 
 			scan.close();
-			return output;
+			return builder.toString();
 		} catch(FileNotFoundException e)
 		{
 			e.printStackTrace();
-			return output;
+			return builder.toString();
 		}	
 	}
 	
@@ -107,11 +108,6 @@ public class FileReaderWriter
 
 		String parent = file.getParent();
 		File newFile = new File(parent, name);
-		if(newFile.exists())
-		{
-			System.out.println("ERROR: File already exists 111 FileReaderWriter");
-			return false;
-		}
 		if(!file.renameTo(newFile))
 		{
 			System.out.println("ERROR: file not able to rename 116 FileReaderWriter");
